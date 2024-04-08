@@ -32,9 +32,14 @@ function Sidebar() {
       path: "/company",
     },
     {
+      title: "Question Bank",
+      icon: <CgBox className="bg-transparent" />,
+      path: "/type",
+    },
+    {
       title: "Categories",
       icon: <TbCategoryPlus className="bg-transparent" />,
-      path: user ? "/admin/categories" : "/login",
+      path: "/categories",
     },
     {
       title: "Products",
@@ -80,7 +85,7 @@ function Sidebar() {
 
   return (
     <div
-      className="md:w-[230px] left-0  overflow-y-auto h-full w-[60px] bg-white fixed hidden md:block"
+      className="md:w-[230px] left-0  overflow-y-auto h-full w-[60px] bg-white fixed hidden md:block "
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       <div className="w-full  flex flex-col items-start gap-2 border-slate-300 bg-[#fff] py-5 r">
@@ -95,7 +100,7 @@ function Sidebar() {
             }`}
           >
             {link.icon}
-            <span className="font-bold bg-transparent text-[15px]">
+            <span className="font-bold font-santoshi bg-transparent text-[15px]">
               {link.title}
             </span>
             {location.pathname === link.path && (
@@ -108,6 +113,7 @@ function Sidebar() {
         <img className="object-center" src={sidBarImage} alt="sidebarImage" />
       </div>
     </div>
+    // <p>h</p>
   );
 }
 

@@ -45,37 +45,37 @@ function Navbar() {
     {
       title: "Categories",
       icon: <TbCategoryPlus className="bg-transparent" />,
-      path:  "/admin/categories" ,
+      path: "/categories",
     },
     {
       title: "Products",
       icon: <IoCubeOutline className="bg-transparent" />,
-      path: "/admin/products" ,
+      path: "/admin/products",
     },
     {
       title: "Opportunities",
       icon: <FaRegLightbulb className="bg-transparent" />,
-      path: "/admin/opportunities" ,
+      path: "/admin/opportunities",
     },
     {
       title: "Enquiries",
       icon: <FaPeopleGroup className="bg-transparent" />,
-      path:  "/admin/enquiries" ,
+      path: "/admin/enquiries",
     },
     {
       title: "Wishlist",
       icon: <LiaClipboardCheckSolid className="bg-transparent" />,
-      path:  "/admin/wishlist" ,
+      path: "/admin/wishlist",
     },
     {
       title: "Analytics",
       icon: <GrAnalytics className="bg-transparent" />,
-      path:  "/admin/dashboard" ,
+      path: "/admin/dashboard",
     },
     {
       title: "Access Management",
       icon: <LuKey className="bg-transparent" />,
-      path:  "/admin/access" ,
+      path: "/admin/access",
     },
     {
       title: "Faqs",
@@ -85,12 +85,12 @@ function Navbar() {
     {
       title: "Setting",
       icon: <CiSettings className="bg-transparent" />,
-      path: "/admin/setting" ,
+      path: "/admin/setting",
     },
     {
       title: "Logout",
       icon: <IoMdLogOut className="bg-transparent" />,
-      path: "/admin/setting" ,
+      path: "/admin/setting",
     },
   ]);
 
@@ -112,7 +112,11 @@ function Navbar() {
     icon: "ep:arrow-down",
     path: "/profile",
   };
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [Open, setOpen] = useState(false);
+  const handleMenu = () => {
+    setOpen((prev) => !prev);
+    console.log(Open);
+  };
   return (
     <>
       <nav className="w-full h-16  fixed flex gap-6 bg-blue-900   top-0 left-0">
@@ -122,7 +126,7 @@ function Navbar() {
             Prolio
           </h1>
           {/* </Link> */}
-          <span className="text-white text-lg hidden md:block bg-blue-900 px-6 py-1">
+          <span className="text-white text-lg font-santoshi hidden md:block bg-blue-900 px-6 py-1">
             {" "}
             Categories
           </span>
@@ -146,7 +150,7 @@ function Navbar() {
             <path d="M20 20l-4.579-4.579M8 15a7 7 0 100-14 7 7 0 000 14z"></path>
           </svg>
         </div>
-        <div className="flex justify-end  w-60 px-3  items-center gap-3 ">
+        <div className="flex justify-end  md:w-60 px-3 md:mx-4 items-center gap-3 ">
           <div className="w-9 h-9  rounded-full bg-blue-50 flex items-center justify-center cursor-pointer">
             <Icon
               icon="iconamoon:notification-light"
@@ -157,54 +161,76 @@ function Navbar() {
           <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center cursor-pointer">
             <Icon className="text-blue-900 text-3xl" icon="bx:user" />
           </div>
-          <div className="block md:hidden">
-            <button
-              className="text-white p-4"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
+          <div className=" md:hidden">
+            {Open ? ( // Render the hamburger icon button when the menu is closed
+              <button className="text-white p-4" onClick={handleMenu}>
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d={
-                    isMenuOpen
-                      ? "M6 18L18 6M6 6l12 12"
-                      : "M4 6h16M4 12h16m-7 6h7"
-                  }
-                />
-              </svg>
-            </button>
-          </div>
-
-          {isMenuOpen && (
-            <div className="md:hidden flex flex-col text-black  justify-center items- gap-1  absolute top-16 left-0 right-0">
-              {navLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  to={link.path}
-                  className="py-2 px-4 hover:bg-blue-800 hover:text-white "
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <div className="flex items-center">
-                    {link.icon}
-                    <span className="ml-2">{link.title}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {/* Profile Dropdown */}
-          {/* <ProfileDropdown profileMenu={profileMenu} /> */}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            ) : (
+              <button className="text-white p-4" onClick={handleMenu}>
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Profile Dropdown */}
+        {/* <ProfileDropdown profileMenu={profileMenu} /> */}
+
+        {Open ? (
+          <>
+            {/* <div className="md:hidden fixed inset-0 bg-gray-900 bg-opacity-30 backdrop-blur-sm z-20"></div> */}
+            <div className="md:hidden absolute left-0 w-full shadow-lg mt-16 z-30 bg-blue-900 backdrop-filter backdrop-blur-lg">
+              <div className="px-2 hover:bg-blue-900 hover:text-white text-black gap-1">
+                {navLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    to={link.path}
+                    onClick={() => {
+                      setOpen(false); // Close the menu when a link is clicked
+                    }}
+                    className="py-2 px-4 hover:bg-blue-800 text-white text-base block"
+                  >
+                    <div className="flex  items-center">
+                      {link.icon}
+                      <span className="ml-2 font-santoshi">{link.title}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : null}
       </nav>
     </>
   );
