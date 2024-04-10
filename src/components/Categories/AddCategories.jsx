@@ -18,6 +18,7 @@ function AddCategories() {
 
   const [categoryValue, setCategoryValue] = useState("");
   const [subcategories, setSubcategories] = useState([{ id: 1, value: "" }]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const handleCategoryChange = (e) => {
     setCategoryValue(e.target.value);
@@ -80,7 +81,6 @@ function AddCategories() {
   }, [selectedProductType]);
 
   const handleCheckboxChange = (stepId, questionId) => {
-
     setQuestions((prevQuestions) => {
       const updatedSteps = prevQuestions.steps.map((step) => {
         if (step.id === stepId) {
@@ -96,6 +96,20 @@ function AddCategories() {
         return step;
       });
 
+      return { ...prevQuestions, steps: updatedSteps };
+    });
+  };
+
+  const handleMasterCheckboxChange = () => {
+    setSelectAll(!selectAll);
+    setQuestions((prevQuestions) => {
+      const updatedSteps = prevQuestions.steps.map((step) => ({
+        ...step,
+        questions: step.questions.map((question) => ({
+          ...question,
+          status: !selectAll,
+        })),
+      }));
       return { ...prevQuestions, steps: updatedSteps };
     });
   };
@@ -247,7 +261,21 @@ function AddCategories() {
           ))}
         </div>
 
-        <div className="flex  flex-wrap h-auto  rounded-xl  p-5 bg-white  m-3">
+        {questions && (
+          <div className="px-8 ">
+            <input
+              type="checkbox"
+              checked={selectAll}
+              className="cursor-pointer"
+              onChange={handleMasterCheckboxChange}
+            />
+            <label className="px-2 font-santoshi text-blue-900 font-bold">
+              select all
+            </label>
+          </div>
+        )}
+
+        <div className="flex  flex-wrap h-auto  rounded-xl  p-5 bg-white  m-3 mb-10">
           {questions &&
             questions?.steps[currentIndex]?.questions.map((question) => (
               <div
@@ -267,10 +295,14 @@ function AddCategories() {
                       handleCheckboxChange(currentIndex + 1, question.id)
                     }
                   />
-                  <label className="font-santoshi text-sm  flex flex-col font-semibold">
-                    {question.description}
-                  </label>
-                  {/* <p className="">{question.subDescription}</p> */}
+                  <div>
+                    <label className="font-santoshi text-sm font-semibold">
+                      {question.description}
+                    </label>
+                    <p className="bg-white text-sm">
+                      {question.subDescription}
+                    </p>
+                  </div>
                 </div>
                 {question.type === "text" ? (
                   <input
@@ -333,23 +365,129 @@ function AddCategories() {
                     placeholder={question.description}
                   />
                 ) : question.type === "card" ? (
-                  question.cards.map((card, index) => (
-                    <div key={index} className="flex gap-4">
-                      <input
-                        className="p-2 h-10 mt-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                        type="text"
-                        placeholder={card.description}
-                      />
+                  <div className="bg-white shadow-3xl rounded-2xl pb-5 mb-10">
+                    <div className="flex flex-row gap-2 p-10 mt-4 ">
+                      {question.cards.map((card, index) => (
+                        <div key={index} className="">
+                          {card.description !== "Image" && (
+                            <label className="font-santoshi font-semibold text-sm">
+                              {card.description}
+                            </label>
+                          )}
+                          {card.type === "text" &&
+                            card.description !== "Quantity/Range" && (
+                              <input
+                                className="w-28 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                type="text"
+                                placeholder={card.description}
+                              />
+                            )}
+                          {card.type === "file" && (
+                            <div className=" border-gray-500 rounded-2xl border-2 border-dashed  w-20 h-20  items-center  bg-white">
+                              <h6 className="bg-white text-xs m-4 pt-3 text-center font-semibold">
+                                Add <br /> Image
+                              </h6>
+                            </div>
+                          )}
+
+                          {card.description === "Quantity/Range" && (
+                            <>
+                              <input
+                                className="w-14 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                type="text"
+                                placeholder="00"
+                              />
+                              <span className="text-center px-1">To</span>
+                              <input
+                                className="w-14 h-10 mt-1 ml-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                type="text"
+                                placeholder="00"
+                              />
+                            </>
+                          )}
+
+                          {card.type === "select" && (
+                            <select className=" w-28 h-10 mt-1 p-2  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                              {card.options.map((option, index) => (
+                                <option key={index} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))
+                    <div className="flex justify-end bg-white mx-10 ">
+                      <button className="w-36  rounded-sm font-bold text-blue-950 h-10 bg-blue-200">
+                        Add Attribute
+                      </button>
+                    </div>
+                  </div>
+                ) : question.type === "attributes" ? ( // New condition for "attributes" type
+                  <div className="bg-white shadow-3xl rounded-2xl mt-4 p-4">
+                    {question.attributes.map((attribute, index) => (
+                      <div
+                        key={index}
+                        className="p-4 bg-white flex gap-10 justify-start items-start"
+                      >
+                        <div className="w-2/5 bg-white">
+                          <label className="block font-semibold text-sm mb-1">
+                            {question.description === "Specifications"
+                              ? "Attribute Name"
+                              : question.description ===
+                                "Business Opportunities"
+                              ? "Opportunities"
+                              : question.description === "Social Media Handles"
+                              ? "Handle"
+                              : ""}
+                          </label>
+                          <input
+                            type="text"
+                            name={`attribute_${index}`}
+                            placeholder={question.description}
+                            value=""
+                            // onChange={(event) =>
+                            //   handleAttributeChange(index, event)
+                            // }
+                            className="w-full  h-9 text-sm px-3  focus:outline-none border border-gray-300 rounded-md"
+                          />
+                        </div>
+                        <div className="bg-transparent w-2/5">
+                          <label className="block font-semibold text-sm mb-1">
+                            {question.description === "Specifications"
+                              ? "Value"
+                              : question.description ===
+                                "Business Opportunities"
+                              ? "Variation list"
+                              : question.description === "Social Media Handles"
+                              ? "URL"
+                              : ""}
+                          </label>
+                          <input
+                            type="text"
+                            name={`attribute_${index}`}
+                            placeholder="value"
+                            value=""
+                            className="w-full h-9 text-sm px-3  focus:outline-none border border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex justify-end bg-white">
+                      <button className="w-36 mt-5 rounded-sm font-bold text-blue-950 h-10 bg-blue-200">
+                        Add Attribute
+                      </button>
+                    </div>
+                  </div>
                 ) : null}
               </div>
             ))}
 
-          <div className="flex justify-start">
+          <div className="flex flex-wrap items-center mt-5 w-full">
             {currentIndex > 0 && (
               <button
-                className="w-48 mt-5 h-10 border border-gray-600"
+                className="w-48 h-10 border border-gray-600"
                 onClick={() => {
                   setCurrentIndex((prev) => prev - 1);
                 }}
@@ -358,9 +496,11 @@ function AddCategories() {
               </button>
             )}
 
+            <div className="flex-grow"></div>
+
             {currentIndex < questions?.steps?.length - 1 && (
               <button
-                className="w-48 mt-5 text-white  h-10 bg-blue-950 hover:bg-green-500 ml-5"
+                className="w-48 text-white h-10 bg-blue-950 hover:bg-green-500 ml-5"
                 onClick={() => {
                   setCurrentIndex((prev) => prev + 1);
                 }}
@@ -371,7 +511,7 @@ function AddCategories() {
 
             {currentIndex === questions?.steps?.length - 1 && (
               <button
-                className="w-48 mt-5 text-white h-10 bg-blue-950 hover:bg-green-500 ml-5"
+                className="w-48 text-white h-10 bg-blue-950 hover:bg-green-500 ml-5"
                 onClick={handleSubmit}
               >
                 Submit

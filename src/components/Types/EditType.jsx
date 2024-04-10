@@ -109,9 +109,30 @@ const EditType = () => {
     setSteps(newSteps);
   };
 
+  const handleAddOptionCard = (stepIndex, questionIndex, cardIndex) => {
+    const newSteps = [...steps];
+    newSteps[stepIndex].questions[questionIndex].cards[cardIndex].options.push(
+      ""
+    );
+    setSteps(newSteps);
+  };
+
   const handleDeleteOption = (stepIndex, questionIndex, optionIndex) => {
     const newSteps = [...steps];
     newSteps[stepIndex].questions[questionIndex].options.splice(optionIndex, 1);
+    setSteps(newSteps);
+  };
+
+  const handleDeleteOptionCard = (
+    stepIndex,
+    questionIndex,
+    cardIndex,
+    optionIndex
+  ) => {
+    const newSteps = [...steps];
+    newSteps[stepIndex].questions[questionIndex].cards[
+      cardIndex
+    ].options.splice(optionIndex, 1);
     setSteps(newSteps);
   };
 
@@ -130,12 +151,36 @@ const EditType = () => {
     setSteps(newSteps);
   };
 
+  const handleCardAddAttribute = (stepIndex, questionIndex, cardIndex) => {
+    const newSteps = [...steps];
+    newSteps[stepIndex].questions[questionIndex].cards[
+      cardIndex
+    ].attributes.push({
+      name: "",
+      value: "",
+    });
+    setSteps(newSteps);
+  };
+
   const handleDeleteAttribute = (stepIndex, questionIndex, attributeIndex) => {
     const newSteps = [...steps];
     newSteps[stepIndex].questions[questionIndex].attributes.splice(
       attributeIndex,
       1
     );
+    setSteps(newSteps);
+  };
+
+  const handleCardDeleteAttribute = (
+    stepIndex,
+    questionIndex,
+    cardIndex,
+    attributeIndex
+  ) => {
+    const newSteps = [...steps];
+    newSteps[stepIndex].questions[questionIndex].cards[
+      cardIndex
+    ].attributes.splice(attributeIndex, 1);
     setSteps(newSteps);
   };
 
@@ -153,6 +198,21 @@ const EditType = () => {
     setSteps(newSteps);
   };
 
+  const handleCardAttributeChange = (
+    stepIndex,
+    questionIndex,
+    cardIndex,
+    attributeIndex,
+    key,
+    value
+  ) => {
+    const newSteps = [...steps];
+    newSteps[stepIndex].questions[questionIndex].cards[cardIndex].attributes[
+      attributeIndex
+    ][key] = value;
+    setSteps(newSteps);
+  };
+
   const handleAddCardQuestion = (stepIndex, questionIndex) => {
     const newQuestion = {
       id: steps[stepIndex].questions[questionIndex].cards.length + 1,
@@ -163,6 +223,7 @@ const EditType = () => {
       value: "",
       status: false,
       required: true,
+      attributes: [],
     };
     const newSteps = [...steps];
     newSteps[stepIndex].questions[questionIndex].cards.push(newQuestion);
@@ -545,6 +606,7 @@ const EditType = () => {
                                   )
                                 }
                               />
+
                               <input
                                 className="type-input"
                                 type="text"
@@ -576,6 +638,10 @@ const EditType = () => {
                                 <option value="text">Text</option>
                                 <option value="number">Number</option>
                                 <option value="textarea">Description</option>
+                                <option value="select">Dropdown</option>
+                                <option value="radio">Radio</option>
+                                <option value="file">Images</option>
+                                <option value="attributes">Attribute</option>
                               </select>
                               <button
                                 className="type-button"
@@ -589,6 +655,177 @@ const EditType = () => {
                               >
                                 Delete
                               </button>
+                              {card.type === "radio" && (
+                                <button
+                                  className="type-button"
+                                  onClick={() => {
+                                    handleAddOptionCard(
+                                      stepIndex,
+                                      questionIndex,
+                                      cardIndex
+                                    );
+                                  }}
+                                >
+                                  Add Option
+                                </button>
+                              )}
+                              {card.type === "select" && (
+                                <button
+                                  className="type-button"
+                                  onClick={() => {
+                                    handleAddOptionCard(
+                                      stepIndex,
+                                      questionIndex,
+                                      cardIndex
+                                    );
+                                  }}
+                                >
+                                  Add Option
+                                </button>
+                              )}
+
+                              {card.type === "attributes" && (
+                                <div>
+                                  <label className="type-label">
+                                    Attributes
+                                  </label>
+                                  <button
+                                    className="type-button"
+                                    onClick={() => {
+                                      handleCardAddAttribute(
+                                        stepIndex,
+                                        questionIndex,
+                                        cardIndex
+                                      );
+                                    }}
+                                  >
+                                    Add Attribute
+                                  </button>
+
+                                  <div style={{ marginBottom: "20px" }}>
+                                    {card.attributes.map(
+                                      (attribute, attributeIndex) => (
+                                        <div key={attributeIndex}>
+                                          <input
+                                            type="text"
+                                            className="type-input"
+                                            placeholder="Attribute Name"
+                                            value={attribute.name}
+                                            onChange={(e) => {
+                                              handleCardAttributeChange(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex,
+                                                "name",
+                                                e.target.value
+                                              );
+                                            }}
+                                          />
+                                          <input
+                                            type="text"
+                                            className="type-input"
+                                            placeholder="Attribute Value"
+                                            value={attribute.value}
+                                            onChange={(e) => {
+                                              handleCardAttributeChange(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex,
+                                                "value",
+                                                e.target.value
+                                              );
+                                            }}
+                                          />
+                                          <Delete
+                                            onClick={() => {
+                                              handleCardDeleteAttribute(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex
+                                              );
+                                            }}
+                                          />
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                              {card.type === "select" && (
+                                <div className="drop-down-option-container">
+                                  {card.options.map((option, optionIndex) => (
+                                    <div key={optionIndex}>
+                                      <input
+                                        className="type-input"
+                                        type="text"
+                                        placeholder="Enter Option"
+                                        value={option}
+                                        onChange={(e) => {
+                                          const newOptions = [...card.options];
+                                          newOptions[optionIndex] =
+                                            e.target.value;
+                                          handleCardQuestionChange(
+                                            stepIndex,
+                                            questionIndex,
+                                            cardIndex,
+                                            "options",
+                                            newOptions
+                                          );
+                                        }}
+                                      />
+                                      <Delete
+                                        onClick={() => {
+                                          handleDeleteOptionCard(
+                                            stepIndex,
+                                            questionIndex,
+                                            cardIndex,
+                                            optionIndex
+                                          );
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {card.type === "radio" && (
+                                <div className="drop-down-option-container">
+                                  {card.options.map((option, optionIndex) => (
+                                    <div key={optionIndex}>
+                                      <input
+                                        className="type-input"
+                                        type="text"
+                                        placeholder="Enter Option"
+                                        value={option}
+                                        onChange={(e) => {
+                                          const newOptions = [...card.options];
+                                          newOptions[optionIndex] =
+                                            e.target.value;
+                                          handleCardQuestionChange(
+                                            stepIndex,
+                                            questionIndex,
+                                            cardIndex,
+                                            "options",
+                                            newOptions
+                                          );
+                                        }}
+                                      />
+                                      <Delete
+                                        onClick={() => {
+                                          handleDeleteOptionCard(
+                                            stepIndex,
+                                            questionIndex,
+                                            cardIndex,
+                                            optionIndex
+                                          );
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                               {/* Add similar input fields for other properties */}
                             </div>
                           ))}

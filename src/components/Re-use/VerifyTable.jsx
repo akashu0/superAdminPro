@@ -14,7 +14,6 @@ import RowDetails from "./RowDetails";
 export default function VerifyTable({ data, columns, value }) {
   const [filtering, setFiltering] = useState("");
 
-
   const table = useReactTable({
     data,
     columns,
@@ -36,6 +35,8 @@ export default function VerifyTable({ data, columns, value }) {
     setSelectedRowData(rowData);
     setShowRowDetails(true);
     setTableRowDetails(false);
+
+    // window.open(rowData.link, "_blank");
   };
 
   const handleClose = () => {
@@ -114,12 +115,15 @@ export default function VerifyTable({ data, columns, value }) {
                     onClick={() => handleRowClick(row.original)}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}   className={`px-4 py-2 bg-transparent ${
-                        cell.column.id === "status" &&
-                        cell.getValue() === "verified"
-                          ? "text-green-600 font-semibold"
-                          : ""
-                      }`}>
+                      <td
+                        key={cell.id}
+                        className={`px-4 py-2 bg-transparent ${
+                          cell.column.id === "status" &&
+                          cell.getValue() === "verified"
+                            ? "text-green-600 font-semibold"
+                            : ""
+                        }`}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -141,7 +145,6 @@ export default function VerifyTable({ data, columns, value }) {
     <>
       <div className="lg:w-[1070px] h-auto w-full  pb-5  rounded-md bg-white  mt-5">
         <div className=" bg-transparent   pt-5">
-
           {showTableDetails && tablelist()}
           {showRowDetails && (
             <RowDetails data={selectedRowData} onClose={handleClose} />
@@ -151,5 +154,3 @@ export default function VerifyTable({ data, columns, value }) {
     </>
   );
 }
-
-
