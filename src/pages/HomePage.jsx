@@ -9,6 +9,7 @@ import CategoriyList from "../components/Categories/CategoriyList"
 import CreateTypes from "../components/Types/CreateTypes"
 import EditType from "../components/Types/EditType"
 import EditCategory from "../components/Categories/EditCategory";
+import BuyingTipsPage from "../components/ProductBuyingTips/BuyingTipsPage";
 
 
 function HomePage() {
@@ -17,7 +18,7 @@ function HomePage() {
       <Navbar />
       <div className="mt-16 h-auto   w-full flex bg-blue-50">
         <Sidebar />
-        <div className="w-full h-auto mt-7 bg-blue-50  md:ml-60 ">
+        <div className="w-full   mt-7 bg-blue-50  md:ml-60 ">
           <Routes>
             <Route path="/company" element={<CompanyList />}></Route>
             <Route path="/type" element={<ViewTypes />}></Route>
@@ -26,6 +27,7 @@ function HomePage() {
             <Route path="/add-type" element={<CreateTypes />}></Route>
             <Route path="/edit-type/:id" element={<EditType />}></Route>
             <Route path="/edit-categorirs/:id" element={<EditCategory />}></Route>
+            <Route path="/product-tips" element={<BuyingTipsPage />}></Route>
           </Routes>
         </div>
       </div>

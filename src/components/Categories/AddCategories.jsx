@@ -137,6 +137,18 @@ function AddCategories() {
     }
   };
 
+  const [isRadioYesSelected, setIsRadioYesSelected] = useState(false);
+
+  const handleRadioChange = (e) => {
+    const value = e.target.value;
+
+    if (value === "Yes") {
+      setIsRadioYesSelected(true);
+    } else {
+      setIsRadioYesSelected(false);
+    }
+  };
+
   return (
     <>
       <div
@@ -365,66 +377,213 @@ function AddCategories() {
                     placeholder={question.description}
                   />
                 ) : question.type === "card" ? (
-                  <div className="bg-white shadow-3xl rounded-2xl pb-5 mb-10">
-                    <div className="flex flex-row gap-2 p-10 mt-4 ">
-                      {question.cards.map((card, index) => (
-                        <div key={index} className="">
-                          {card.description !== "Image" && (
-                            <label className="font-santoshi font-semibold text-sm">
-                              {card.description}
-                            </label>
-                          )}
-                          {card.type === "text" &&
-                            card.description !== "Quantity/Range" && (
-                              <input
-                                className="w-28 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                                type="text"
-                                placeholder={card.description}
-                              />
-                            )}
-                          {card.type === "file" && (
-                            <div className=" border-gray-500 rounded-2xl border-2 border-dashed  w-20 h-20  items-center  bg-white">
-                              <h6 className="bg-white text-xs m-4 pt-3 text-center font-semibold">
-                                Add <br /> Image
-                              </h6>
+                  <div className="">
+                    {question.cards.map((card, index) => (
+                      <div key={index}>
+                        {card.type === "radio" && (
+                          <>
+                            <div className="px-3">
+                              <p>{card.description}</p>
                             </div>
-                          )}
-
-                          {card.description === "Quantity/Range" && (
-                            <>
-                              <input
-                                className="w-14 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                                type="text"
-                                placeholder="00"
-                              />
-                              <span className="text-center px-1">To</span>
-                              <input
-                                className="w-14 h-10 mt-1 ml-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                                type="text"
-                                placeholder="00"
-                              />
-                            </>
-                          )}
-
-                          {card.type === "select" && (
-                            <select className=" w-28 h-10 mt-1 p-2  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
-                              {card.options.map((option, index) => (
-                                <option key={index} value={option}>
-                                  {option}
-                                </option>
+                            <div className="flex gap-4">
+                              {question.options.map((option, index) => (
+                                <label
+                                  key={index}
+                                  className="flex mx-4 items-center"
+                                >
+                                  <input
+                                    type="radio"
+                                    className="form-radio text-blue-500  cursor-pointer"
+                                    name={`radio-${question.id}`}
+                                    onChange={(e) => handleRadioChange(e)}
+                                    value={option}
+                                  />
+                                  <span className="px-3 cursor-pointer">
+                                    {option}
+                                  </span>
+                                </label>
                               ))}
-                            </select>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex justify-end bg-white mx-10 ">
-                      <button className="w-36  rounded-sm font-bold text-blue-950 h-10 bg-blue-200">
-                        Add Attribute
-                      </button>
-                    </div>
+                            </div>
+                            {isRadioYesSelected && (
+                              <div className="bg-white shadow-3xl rounded-xl mt-3  p-5">
+                                {question.cards.map((card, index) => {
+                                  return (
+                                    <>
+                                      {card.type === "text" && (
+                                        <div className="flex flex-col ">
+                                          <label className="font-santoshi text-sm ">
+                                            {" "}
+                                            {card.description}{" "}
+                                          </label>
+                                          <input
+                                            className="w-1/2 h-9 text-sm p-3 mt-2 focus:outline-none border  border-gray-300 rounded-md focus:border-blue-500"
+                                            type={question.type}
+                                            placeholder={question.description}
+                                          />
+                                        </div>
+                                      )}
+                                      {card.type === "imageAttribute" && (
+                                        <div className=" pt-5 ">
+                                          {card.attributes.map(
+                                            (question, index) => (
+                                              <div
+                                                key={index}
+                                                className="flex items-center gap-3  w-full"
+                                              >
+                                                {/* <input type="file" /> */}
+                                                <div className="flex  justify-center items-center text-center border-gray-500 rounded-2xl border-2 border-dashed  w-20 h-20  ">
+                                                  <h6 className="bg-white text-xs    text-center font-semibold">
+                                                    Add <br /> Image
+                                                  </h6>
+                                                </div>
+                                                  <label className="text-sm font-santoshi font-semibold">Attribute Name </label>
+                                                <input
+                                                  className="w-2/5 h-9 text-sm p-3 mt-2  focus:outline-none border  border-gray-300 rounded-md focus:border-blue-500"
+                                                  type={question.name}
+                                                  placeholder={question.name}
+                                                />
+                                                <input
+                                                  className=" w-2/5  h-9 text-sm p-3 mt-2 focus:outline-none border  border-gray-300 rounded-md focus:border-blue-500"
+                                                  type={question.name}
+                                                  placeholder={question.name}
+                                                />
+                                               
+                                              </div>
+                                            )
+                                          )}
+                                           <div className="flex justify-end bg-white">
+                                                  <button className="w-36 mt-5 rounded-sm font-bold text-blue-950 h-10 bg-blue-200">
+                                                    Add Attribute
+                                                  </button>
+                                                </div>
+                                        </div>
+                                      )}
+                                    </>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ) : question.type === "attributes" ? ( // New condition for "attributes" type
+                ) : // <div className="bg-white shadow-3xl rounded-2xl pb-5 mb-10">
+                //   <div className="flex flex-row gap-2 p-10 mt-4 ">
+                //     {question.cards.map((card, index) => (
+                //       <div key={index} className="">
+
+                //         {card.description !== "Image" && (
+                //           <label className="font-santoshi font-semibold text-sm">
+                //             {card.description}
+                //           </label>
+                //         )}
+                //         {card.type === "text" &&
+                //           card.description !== "Quantity/Range" && (
+                //             <input
+                //               className="w-28 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                //               type="text"
+                //               placeholder={card.description}
+                //             />
+                //           )}
+                //         {card.type === "file" && (
+                //           <div className=" border-gray-500 rounded-2xl border-2 border-dashed  w-20 h-20  items-center  bg-white">
+                //             <h6 className="bg-white text-xs m-4 pt-3 text-center font-semibold">
+                //               Add <br /> Image
+                //             </h6>
+                //           </div>
+                //         )}
+
+                //         {card.description === "Quantity/Range" && (
+                //           <>
+                //             <input
+                //               className="w-14 h-10 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                //               type="text"
+                //               placeholder="00"
+                //             />
+                //             <span className="text-center px-1">To</span>
+                //             <input
+                //               className="w-14 h-10 mt-1 ml-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                //               type="text"
+                //               placeholder="00"
+                //             />
+                //           </>
+                //         )}
+
+                //         {card.type === "select" && (
+                //           <select className=" w-28 h-10 mt-1 p-2  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                //             {card.options.map((option, index) => (
+                //               <option key={index} value={option}>
+                //                 {option}
+                //               </option>
+                //             ))}
+                //           </select>
+                //         )}
+
+                //          {card.type === "attributes" && (
+                //                 <>
+                //                   {card.attributes.map(() => (
+                //                     <div
+                //                       key={index}
+                //                       className="p-4 bg-white flex gap-10 justify-start items-start"
+                //                     >
+                //                       <div className="w-2/5 bg-white">
+                //                         <label className="block font-semibold bg-transparent text-sm mb-1">
+                //                           {question.description ===
+                //                           "Specifications"
+                //                             ? "Attribute Name"
+                //                             : question.description ===
+                //                               "Business Opportunities"
+                //                             ? "Opportunities"
+                //                             : question.description ===
+                //                               "Social Media Handles"
+                //                             ? "Handle"
+                //                             : ""}
+                //                         </label>
+                //                         <input
+                //                           type="text"
+                //                           name={`attribute_${index}`}
+                //                           // placeholder={question.description}
+                //                           value=""
+                //                           className="w-full bg-transparent h-9 text-sm px-3 focus:outline-none border border-gray-300 rounded-md"
+                //                         />
+                //                       </div>
+                //                       <div className="bg-transparent w-2/5">
+                //                         <label className="block font-semibold bg-transparent text-sm mb-1">
+                //                           {question.description ===
+                //                           "Specifications"
+                //                             ? "Value"
+                //                             : question.description ===
+                //                               "Business Opportunities"
+                //                             ? "Variation list"
+                //                             : question.description ===
+                //                               "Social Media Handles"
+                //                             ? "URL"
+                //                             : ""}
+                //                         </label>
+                //                         <input
+                //                           type="text"
+                //                           name={`attribute_${index}`}
+                //                           placeholder="value"
+                //                           value=""
+                //                           className="w-full h-9 text-sm px-3 bg-transparent focus:outline-none border border-gray-300 rounded-md"
+                //                         />
+                //                       </div>
+                //                     </div>
+                //                   ))}
+                //                 </>
+                //               )}
+                //       </div>
+                //     ))}
+                //   </div>
+                //   <div className="flex justify-end bg-white mx-10 ">
+                //     <button className="w-36  rounded-sm font-bold text-blue-950 h-10 bg-blue-200">
+                //       Add Attribute
+                //     </button>
+                //   </div>
+                // </div>
+
+                question.type === "attributes" ? (
                   <div className="bg-white shadow-3xl rounded-2xl mt-4 p-4">
                     {question.attributes.map((attribute, index) => (
                       <div

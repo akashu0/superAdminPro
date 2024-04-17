@@ -54,6 +54,7 @@ const EditType = () => {
           attributes: [], // Initialize attributes array for attribute type
           cards: [],
           required: true,
+          images: [],
         },
       ], // Array to hold questions for this step
       condition: true,
@@ -79,6 +80,7 @@ const EditType = () => {
       attributes: [],
       cards: [], // Initialize attributes array for attribute type
       required: true,
+      images: [],
     };
     const newSteps = [...steps];
     newSteps[stepIndex].questions.push(newQuestion);
@@ -151,15 +153,32 @@ const EditType = () => {
     setSteps(newSteps);
   };
 
-  const handleCardAddAttribute = (stepIndex, questionIndex, cardIndex) => {
-    const newSteps = [...steps];
-    newSteps[stepIndex].questions[questionIndex].cards[
-      cardIndex
-    ].attributes.push({
-      name: "",
-      value: "",
-    });
-    setSteps(newSteps);
+  const handleCardAddAttribute = (
+    stepIndex,
+    questionIndex,
+    cardIndex,
+    image
+  ) => {
+    if (image === "image") {
+      const newSteps = [...steps];
+      newSteps[stepIndex].questions[questionIndex].cards[
+        cardIndex
+      ].attributes.push({
+        name: "",
+        value: "",
+        image: [],
+      });
+      setSteps(newSteps);
+    } else {
+      const newSteps = [...steps];
+      newSteps[stepIndex].questions[questionIndex].cards[
+        cardIndex
+      ].attributes.push({
+        name: "",
+        value: "",
+      });
+      setSteps(newSteps);
+    }
   };
 
   const handleDeleteAttribute = (stepIndex, questionIndex, attributeIndex) => {
@@ -224,6 +243,7 @@ const EditType = () => {
       status: false,
       required: true,
       attributes: [],
+      images: [],
     };
     const newSteps = [...steps];
     newSteps[stepIndex].questions[questionIndex].cards.push(newQuestion);
@@ -642,6 +662,9 @@ const EditType = () => {
                                 <option value="radio">Radio</option>
                                 <option value="file">Images</option>
                                 <option value="attributes">Attribute</option>
+                                <option value="imageAttribute">
+                                  Image Attribute
+                                </option>
                               </select>
                               <button
                                 className="type-button"
@@ -682,6 +705,79 @@ const EditType = () => {
                                 >
                                   Add Option
                                 </button>
+                              )}
+
+                              {card.type === "imageAttribute" && (
+                                <div>
+                                  <label className="type-label">
+                                    Attributes
+                                  </label>
+                                  <button
+                                    className="type-button"
+                                    onClick={() => {
+                                      handleCardAddAttribute(
+                                        stepIndex,
+                                        questionIndex,
+                                        cardIndex,
+                                        "image"
+                                      );
+                                    }}
+                                  >
+                                    Add Attribute
+                                  </button>
+
+                                  <div style={{ marginBottom: "20px" }}>
+                                    {card.attributes.map(
+                                      (attribute, attributeIndex) => (
+                                        <div key={attributeIndex}>
+                                          <input type="file" />
+                                          <input
+                                            type="text"
+                                            className="type-input"
+                                            placeholder="Attribute Name"
+                                            value={attribute.name}
+                                            onChange={(e) => {
+                                              handleCardAttributeChange(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex,
+                                                "name",
+                                                e.target.value
+                                              );
+                                            }}
+                                          />
+                                          <input
+                                            type="text"
+                                            className="type-input"
+                                            placeholder="Attribute Value"
+                                            value={attribute.value}
+                                            onChange={(e) => {
+                                              handleCardAttributeChange(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex,
+                                                "value",
+                                                e.target.value
+                                              );
+                                            }}
+                                          />
+                                          <Delete
+                                            onClick={() => {
+                                              handleCardDeleteAttribute(
+                                                stepIndex,
+                                                questionIndex,
+                                                cardIndex,
+                                                attributeIndex
+                                              );
+                                            }}
+                                          />
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
                               )}
 
                               {card.type === "attributes" && (

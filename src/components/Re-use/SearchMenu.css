@@ -1,0 +1,36 @@
+.menu-main-container {
+  padding-top: 20px;
+  padding-left: 10px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: transparent;
+}
+
+.menu-main-container-items {
+  border: 1px solid black;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  position: absolute;
+  top: calc(100% + 5px); /* Adjust this value as needed */
+  left: 0;
+  width: max-content; /* or width: inherit; */
+  background-color: white;
+  z-index: 2;
+  border-radius: 10px;
+}

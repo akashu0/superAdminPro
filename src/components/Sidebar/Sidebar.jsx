@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
 import { BsFilePostFill } from "react-icons/bs";
+import { TiPencil } from "react-icons/ti";
 import { LiaClipboardCheckSolid } from "react-icons/lia";
 import { CiSettings } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -65,6 +66,11 @@ function Sidebar() {
       title: "Analytics",
       icon: <GrAnalytics className="bg-transparent" />,
       path: user ? "/admin/dashboard" : "/login",
+    },
+    {
+      title: "Business Tips",
+      icon: <TiPencil className="bg-transparent" />,
+      path: user ? "/product-tips" : "/login",
     },
     {
       title: "Access Management",
